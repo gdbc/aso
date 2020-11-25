@@ -2,18 +2,29 @@
 
 #ref: https://github.com/Azure/azure-service-operator
 
-#kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v0.12.0/cert-manager.yaml
+# Variables
 
-#helm repo add azureserviceoperator https://raw.githubusercontent.com/Azure/azure-service-operator/master/charts
+#AZSP is the name of the service principal you wish use to create infrastructure with in the subscription
+AZSP="gdbc-aso-test-sp"
+
+# Deploy cert-manager
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v0.12.0/cert-manager.yaml
+
+# Download repo
+helm repo add azureserviceoperator https://raw.githubusercontent.com/Azure/azure-service-operator/master/charts
 
 # Proceed to create a Az Service Principal
-# See url for details then set the below four vars from the sp you created
+# See url for details 
 
+# Set subscription id and az tennant id using existing "default" subscription
+read AZURE_SUBSCRIPTION_ID AZURE_TENANT_ID < <(echo $(az account show | jq -r '.id, .tenantId'))
 
-AZURE_SUBSCRIPTION_ID="1e8b3504-93d8-422d-b5a3-3b3a3aa48ab3"
-AZURE_TENANT_ID="7a9376d4-7c43-480f-82ba-a090647f651d"
-AZURE_CLIENT_ID="a672704e-7aee-4b05-80b3-3f01b5f845fa"
-AZURE_CLIENT_SECRET="y~8tG4T_LI_Ib6ysz.vn4TV9XNilok~ESw"
+# Create sp and extract App ID and Client secret!
+read AZURE_CLIENT_ID AZURE_CLIENT_SECRET < <(echo $(az ad sp create-for-rbac -n $AZSP --role contributor --scopes /subscriptions/$AZURE_SUBSCRIPTION_ID | jq -r '.appId, .password'))
+
+echo "$AZSP AppId: $AZURE_CLIENT_ID"
+echo "$AZSP password: $AZURE_CLIENT_SECRET"
+
 
 helm upgrade --install aso https://github.com/Azure/azure-service-operator/raw/master/charts/azure-service-operator-0.1.0.tgz \
         --create-namespace \
