@@ -1,0 +1,10 @@
+apiVersion: azure.microsoft.com/v1alpha1
+kind: AzureNetworkInterface
+metadata:
+  name: nic-sample-01
+spec:
+  location: westeurope
+  resourceGroup: gdbc-aso-test-rg
+  vnetName: gdbc-aso-test-vnet
+  subnetName: test1
+  publicIPAddressName: nic-pip-sample-01

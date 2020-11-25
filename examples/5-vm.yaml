@@ -1,0 +1,14 @@
+apiVersion: azure.microsoft.com/v1alpha1
+kind: AzureVirtualMachine
+metadata:
+  name: gdbc-aso-test-vm
+spec:
+  location: westeurope
+  resourceGroup: gdbc-aso-test-rg
+  vmSize: Standard_DS1_v2
+  osType: Linux
+  adminUserName: azureuser
+  # SSH public key to be used with VM (eg cat ~/.ssh/id_rsa.pub)
+  sshPublicKeyData: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDqutWHZ6Y1QvTqV9y/duvDmoPRo7BqIFC4sfhcNWRt2w5ohgRyPPTWL+8zrYoabPdD2m7IHHtYDtA3SumkZefUq8J1egoeKj1O9N68NQ5n5HIHKmKzE2ahpablXnb07di1Ux3/lapvSogFa+F+RgR2sqcarlO2mn073pj+o0fzdTkzaTYDlUtQzO1S7nrdaLzOhY3BjiXQH8w1una53Z43r25iBV8cPcc12m9eUa6JEGgzCfA8ozT5Vhj9AnhVl9AhuKOKQjqHXQJ8MKUU8N1GG0Sx+T8T2HEQwk0b7RyF9ADyllrPCVZtciv6RyVmm0SquUNKvvi1suS4Rs117IUd"
+  networkInterfaceName: nic-sample-01
+  platformImageURN: Canonical:UbuntuServer:16.04-LTS:latest
